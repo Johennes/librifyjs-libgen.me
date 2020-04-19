@@ -15,6 +15,16 @@ with free / libre code.
 
 - Probably anything else
 
+## Installing
+
+The extension is currently not listed on addons.mozilla.org. To install it, download the
+latest version from the `releases` folder and drag the file onto your browser window.
+
+## Running (from Code)
+
+For development and testing you can run the extension from code in an isolated browser
+instance through `./web-ext run`.
+
 ## License
 
 LibrifyJS: libgen.me is licensed under the GNU General Public License as
