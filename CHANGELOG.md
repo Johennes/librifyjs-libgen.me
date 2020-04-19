@@ -6,7 +6,14 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-- Nothing at the moment
+### Changed
+
+- Extend logging on all pages
+
+### Fixed
+
+- Add semicolons to prevent unintended ASI issues
+- Update API path to latest
 
 ## [0.1.0] - 2019-11-07
 

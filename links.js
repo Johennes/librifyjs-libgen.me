@@ -16,43 +16,46 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+console.log('LibrifyJS: Welcome to LibrifyJS');
+console.log(`LibrifyJS: Version ${browser.runtime.getManifest().version}`);
+
 (() => {
-    loadLinks()
+    loadLinks();
 
     function loadLinks() {
-        let params = new URLSearchParams(window.location.search)
+        let params = new URLSearchParams(window.location.search);
         if (!params.has('id')) {
-            console.error('LibrifyJS: Could not locate ID in query string')
-            return
+            console.error('LibrifyJS: Could not locate ID in query string');
+            return;
         }
 
         fetch(createRequest(params.get('id')))
             .then(response => response.json())
             .catch(onLoadError)
-            .then(json => onLoadSuccess(json))
+            .then(json => onLoadSuccess(json));
     }
 
     function createRequest(id) {
-        return new Request(`https://books.libgen.me/book/${id}`, {
+        return new Request(`https://books.libgen.me/links/${id}`, {
             "credentials": "omit",
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
             }
-        })
+        });
     }
 
     function onLoadError(error) {
-        console.error(`LibrifyJS: Loading failed - ${error}`)
+        console.error(`LibrifyJS: Loading failed - ${error}`);
     }
 
     function onLoadSuccess(json) {
-        let loadingCantainer = document.querySelector('div.loading_layout')
+        let loadingCantainer = document.querySelector('div.loading_layout');
         if (!loadingCantainer) {
-            console.error('LibrifyJS: Could not locate loading container')
-            return
+            console.error('LibrifyJS: Could not locate loading container');
+            return;
         }
-        loadingCantainer.innerHTML = getLinksHtml(json)
+        loadingCantainer.innerHTML = getLinksHtml(json);
     }
 
     function getLinksHtml(json) {
@@ -65,13 +68,13 @@
                 <div class="results">
                     ${json.links.map(getLinkHtml).join('')}
                 </div>
-            </div>`
+            </div>`;
     }
 
     function getLinkHtml(url) {
         return `
             <div class="link_item">
                 <p><a href="${url}">${url}</a></p>
-            </div>`
+            </div>`;
     }
-})()
+})();

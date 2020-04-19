@@ -16,53 +16,56 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+console.log('LibrifyJS: Welcome to LibrifyJS');
+console.log(`LibrifyJS: Version ${browser.runtime.getManifest().version}`);
+
 (() => {
-    loadItem()
+    loadItem();
 
     function loadItem() {
-        let params = new URLSearchParams(window.location.search)
+        let params = new URLSearchParams(window.location.search);
         if (!params.has('id')) {
-            console.error('LibrifyJS: Could not locate ID in query string')
-            return
+            console.error('LibrifyJS: Could not locate ID in query string');
+            return;
         }
 
         fetch(createRequest(params.get('id')))
             .then(response => response.json())
             .catch(onLoadError)
-            .then(json => onLoadSuccess(json))
+            .then(json => onLoadSuccess(json));
     }
 
     function createRequest(id) {
-        return new Request(`https://books.libgen.me/book/${id}`, {
+        return new Request(`https://books.libgen.me/book/get/${id}`, {
             "credentials": "omit",
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
             }
-        })
+        });
     }
 
     function onLoadError(error) {
-        console.error(`LibrifyJS: Loading failed - ${error}`)
+        console.error(`LibrifyJS: Loading failed - ${error}`);
     }
 
     function onLoadSuccess(json) {
-        let loadingCantainer = document.querySelector('div.loading_layout')
+        let loadingCantainer = document.querySelector('div.loading_layout');
         if (!loadingCantainer) {
-            console.error('LibrifyJS: Could not locate loading container')
-            return
+            console.error('LibrifyJS: Could not locate loading container');
+            return;
         }
-        loadingCantainer.style = 'display: block; width: auto; height: auto; padding-left: 20px; padding-right: 20px; overflow-wrap: anywhere;'
-        loadingCantainer.innerHTML = getItemHtml(json)
+        loadingCantainer.style = 'display: block; width: auto; height: auto; padding-left: 20px; padding-right: 20px; overflow-wrap: anywhere;';
+        loadingCantainer.innerHTML = getItemHtml(json);
     }
 
     function getItemHtml(json) {
-        let result = ''
+        let result = '';
         for (let key in json) {
             if (json.hasOwnProperty(key)) {
-                result += `<div>${key}: ${json[key]}</div><br/>`
+                result += `<div>${key}: ${json[key]}</div><br/>`;
             }
           }
-        return result
+        return result;
     }
-})()
+})();

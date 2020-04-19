@@ -16,39 +16,63 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-(() => {
-    let searchField = document.querySelector('input')
+'use strict';
+
+console.log('LibrifyJS: Welcome to LibrifyJS');
+console.log(`LibrifyJS: Version ${browser.runtime.getManifest().version}`);
+
+function home() {
+    console.log('LibrifyJS: Locating search field');
+    let searchField = document.querySelector('input');
     if (!searchField) {
-        console.error('LibrifyJS: Could not locate search field')
-        return
+        console.error('LibrifyJS: Could not locate search field');
+        return;
     }
+    console.log('LibrifyJS: Found search field');
 
-    connectSearchField()
-    connectCollectionLinks()
+    home_connectSearchField(searchField);
+    home_connectCollectionLinks(searchField);
+}
 
-    function connectSearchField() {
-        searchField.addEventListener('keyup', event => {
-            if (event.keyCode !== 13) {
-                return
-            }
-            event.preventDefault()
-            document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, 'all', 1, 0)
-        })
-    }
-
-    function connectCollectionLinks() {
-        let links = document.querySelectorAll('div.categories a.urls')
-        if (!links) {
-            console.warn('LibrifyJS: Could not locate collection links')
-            return
+function home_connectSearchField(searchField) {
+    console.log('LibrifyJS: Adding key-up event listener for search field');
+    searchField.addEventListener('keyup', function(event) {
+        console.log(`LibrifyJS: Received key ${event.keyCode} in search field`);
+        if (event.keyCode !== 13) {
+            console.log('LibrifyJS: Discarding key');
+            return;
         }
-        links[0].classList.add('active')
-        for (let i = 0; i < links.length; ++i) {
-            let collection = i === 0 ? 'all' : links[i].textContent.trim()
-            links[i].addEventListener('click', function(event) {
-                event.preventDefault()
-                document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, collection, 1, 0)
-            })
-        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        let url = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, 'all', 1, 0);
+        console.log(`LibrifyJS: Redirecting to ${url}`);
+        document.location.href = url;
+    })
+    console.log('LibrifyJS: Finished adding key-up event listener for search field');
+}
+
+function home_connectCollectionLinks(searchField) {
+    console.log('LibrifyJS: Adding click event listeners for collection links');
+    let links = document.querySelectorAll('div.categories a.urls');
+    if (!links.length) {
+        console.warn('LibrifyJS: Could not locate collection links');
+        return;
     }
-})()
+    links[0].classList.add('active');
+    for (let i = 0; i < links.length; ++i) {
+        let collection = i === 0 ? 'all' : links[i].textContent.trim();
+        links[i].addEventListener('click', function(event) {
+            console.log(`LibrifyJS: Received click for ${collection} collection link`);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            let url = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, collection, 1, 0);
+            console.log(`LibrifyJS: Redirecting to ${url}`);
+            document.location.href = url;
+        });
+    }
+    console.log('LibrifyJS: Finished adding click event listeners for collection links');
+}
+
+console.log('LibrifyJS: Running home function');
+home();
+console.log('LibrifyJS: Finished running home function');

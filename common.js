@@ -18,12 +18,14 @@
 
 let LibrifyJS_LibgenMe = {
     createSearchUrl: function(term, collection, currentPage, perPage) {
+        let args = JSON.stringify({term: term, collection: collection, currentPage: currentPage, perPage: perPage});
+        console.log(`LibrifyJS: Creating search URL for ${args}`);
         return `https://libgen.me/search/all`
             + `?q=${encodeURIComponent(term)}`
             + `&year=0`
             + `&search=${encodeURIComponent(term)}`
             + `&collection=${encodeURIComponent(collection)}`
             + `&currentPage=${encodeURIComponent(currentPage)}`
-            + `&perPage=${encodeURIComponent(perPage)}`
+            + `&perPage=${encodeURIComponent(perPage)}`;
     }
-}
+};

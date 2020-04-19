@@ -16,77 +16,86 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-(() => {
-    let searchField = document.querySelector('input')
+console.log('LibrifyJS: Welcome to LibrifyJS');
+console.log(`LibrifyJS: Version ${browser.runtime.getManifest().version}`);
+
+(function() {
+    let searchField = document.querySelector('input');
     if (!searchField) {
-        console.error('LibrifyJS: Could not locate search field')
-        return
+        console.error('LibrifyJS: Could not locate search field');
+        return;
     }
 
-    let params = getParamsFromUrl()
+    let params = getParamsFromUrl();
 
-    prefillSearchField()
-    connectSearchField()
-    connectCollectionLinks()
-    startSearch()
+    prefillSearchField();
+    connectSearchField();
+    connectCollectionLinks();
+    startSearch();
 
     function getParamsFromUrl() {
-        let params = new URLSearchParams(document.location.search)
+        let params = new URLSearchParams(document.location.search);
         return {
             term: params.has('search') ? decodeURIComponent(params.get('search')) : '',
             collection: params.has('collection') ? decodeURIComponent(params.get('collection')) : 'all',
             currentPage: params.has('currentPage') ? parseInt(decodeURIComponent(params.get('currentPage'))) || 1 : 1,
             perPage: params.has('perPage') ? parseInt(decodeURIComponent(params.get('perPage'))) || 0 : 0
-        }
+        };
     }
 
     function prefillSearchField() {
-        searchField.value = params.term
+        searchField.value = params.term;
     }
 
     function connectSearchField() {
-        searchField.addEventListener('keyup', event => {
+        searchField.addEventListener('keyup', function(event) {
             if (event.keyCode !== 13) {
-                return
+                return;
             }
-            event.preventDefault()
-            document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, params.collection, 1, 0)
-        })
+            event.preventDefault();
+            document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, params.collection, 1, 0);
+        });
     }
 
     function connectCollectionLinks() {
-        let links = document.querySelectorAll('div.categories a.urls')
-        if (!links) {
-            console.warn('LibrifyJS: Could not locate collection links')
-            return
+        let links = document.querySelectorAll('div.categories a.urls');
+        if (!links.length) {
+            console.warn('LibrifyJS: Could not locate collection links');
+            return;
         }
         for (let i = 0; i < links.length; ++i) {
-            let collection = i === 0 ? 'all' : links[i].textContent.trim()
+            let collection = i === 0 ? 'all' : links[i].textContent.trim();
             if (collection === params.collection) {
-                links[i].classList.add('active')
+                links[i].classList.add('active');
             } else {
-                links[i].classList.remove('active')
+                links[i].classList.remove('active');
             }
             links[i].addEventListener('click', function(event) {
-                event.preventDefault()
-                document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, collection, 1, 0)
-            })
+                event.preventDefault();
+                document.location.href = LibrifyJS_LibgenMe.createSearchUrl(searchField.value, collection, 1, 0);
+            });
         }
     }
 
     function startSearch() {
         if (!params.term) {
-            return
+            return;
         }
-        let container = getContainer()
+        let container = getContainer();
         if (!container) {
-            return
+            return;
         }
-        container.innerHTML = "Loading..."
+        container.innerHTML = "Loading...";
         fetch(createRequest())
-            .then(response => response.json())
+            .then(function(response) {
+                let clone = response.clone()
+                console.log('LibrifyJS: Received search response')
+                console.log(clone)
+                clone.text().then(text => console.log(text))
+                return response.json()
+            })
             .catch(onSearchError)
-            .then(json => onSearchSuccess(json))
+            .then(onSearchSuccess);
     }
 
     function createRequest() {
@@ -96,7 +105,7 @@
             headers: {
                 'Accept': 'application/json',
             }
-        })
+        });
     }
 
     function createRequestUrl() {
@@ -106,45 +115,41 @@
             + `&sort=0`
             + `&perPage=${encodeURIComponent(params.perPage)}`
             + `&year[]=0`
-            + `&collection=${encodeURIComponent(params.collection)}`
+            + `&collection=${encodeURIComponent(params.collection)}`;
     }
 
     function onSearchError(error) {
-        console.error(`LibrifyJS: Search failed - ${error}`)
+        console.error(`LibrifyJS: Search failed - ${error}`);
     }
 
     function onSearchSuccess(json) {
-        let container = getContainer()
+        let container = getContainer();
         if (!container) {
-            return
+            return;
         }
-        container.innerHTML = ""
-        let results = json['books']
+        container.innerHTML = "";
+        let results = json['books'];
         if (!results) {
-            return
+            return;
         }
-        results.forEach(result => {
-            container.insertAdjacentHTML('beforeend', getResultHtml(result))
-        })
-        console.log('a')
-        console.log(json)
-        console.log(getFooterHtml(json['pages']))
-        console.log('b')
-        container.insertAdjacentHTML('afterend', getFooterHtml(json['pages']))
+        results.forEach(function(result) {
+            container.insertAdjacentHTML('beforeend', getResultHtml(result));
+        });
+        container.insertAdjacentHTML('afterend', getFooterHtml(json['pages']));
     }
 
     function getContainer() {
-        let container = document.querySelector('div.search_content')
+        let container = document.querySelector('div.search_content');
         if (!container) {
-            console.error('LibrifyJS: Could not locate search content container')
-            return null
+            console.error('LibrifyJS: Could not locate search content container');
+            return null;
         }
-        return container
+        return container;
     }
 
     function getResultHtml(result) {
         let pictureStyle = `background: rgba(0, 0, 0, 0) url(&quot;https://covers.libgen.me/cover/${result.id}&quot;) no-repeat scroll center center / cover;`
-            + ` width: 145px; height: 180px;`
+            + ` width: 145px; height: 180px;`;
         return `
             <div class="book_item">
                 <div class="picture" style="${pictureStyle}"></div>
@@ -161,7 +166,7 @@
                     </div>
                 </div>
             </div>
-            <hr/>`
+            <hr/>`;
     }
 
     function getFooterHtml(totalPages) {
@@ -174,6 +179,6 @@
                     <a style="${params.currentPage === totalPages ? 'display: none;' : ''}"
                         href="${LibrifyJS_LibgenMe.createSearchUrl(params.term, params.collection, params.currentPage + 1, params.perPage)}">&gt;</a>
                 </div>
-            </div>`
+            </div>`;
     }
-})()
+})();

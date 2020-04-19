@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "LibrifyJS: libgen.me",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Libre replacement for JavaScript blocked by GNU LibreJS on libgen.me",
   "content_scripts": [
     {
