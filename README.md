@@ -34,4 +34,4 @@ published by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 [GitHub]: https://github.com/Johennes/librifyjs-libgen.me
-[GitLab]: https://gitlab.com/cherrypicker/librifyjs-libgen.me
+[GitLab]: https://gitlab.com/cherrypicker/librifyjs-libgen-me
