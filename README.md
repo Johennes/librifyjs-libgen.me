@@ -1,7 +1,5 @@
 # LibrifyJS: libgen.me
 
-*Mirrors: [GitHub] ~ [GitLab]*
-
 A Firefox extension for replacing the JavaScript blocked by GNU LibreJS on libgen.me
 with free / libre code.
 
@@ -32,6 +30,3 @@ instance through `./web-ext run`.
 LibrifyJS: libgen.me is licensed under the GNU General Public License as
 published by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
-[GitHub]: https://github.com/Johennes/librifyjs-libgen.me
-[GitLab]: https://gitlab.com/cherrypicker/librifyjs-libgen-me
