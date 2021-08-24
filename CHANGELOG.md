@@ -27,4 +27,4 @@ Initial release
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
 [Unreleased]: https://github.com/Johennes/librifyjs-libgen.me/compare/0.1.1...master
 [0.1.1]: https://github.com/Johennes/librifyjs-libgen.me/compare/0.1.0...0.1.1
-[0.1.0]: https://github.com/Johennes/librifyjs-libgen.me/releases/tag/0.1.0'
+[0.1.0]: https://github.com/Johennes/librifyjs-libgen.me/releases/tag/0.1.0
