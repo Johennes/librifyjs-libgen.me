@@ -3,6 +3,10 @@
 A Firefox extension for replacing the JavaScript blocked by GNU LibreJS on libgen.me
 with free / libre code.
 
+Elsevier has been pressing charges against libgen.me and so Mozilla decided to remove
+the extension from addons.mozilla.org. You can still install it manually from the code
+in this repository though.
+
 ## Status
 
 ### What Works
